@@ -9,7 +9,7 @@ const soundboard = {
   snareElement: null,
   wobbleElement: null,
   vocalElement: null,
-  scratchElement: null,
+  gregElement: null,
   
   /**
    * Propriétés liées à l'Audio
@@ -20,7 +20,7 @@ const soundboard = {
   snareAudio: null,
   wobbleAudio: null,
   vocalAudio: null,
-  scratchAudio: null,
+  gregAudio: null,
 
   /**
    * Méthode permettant d'initialiser la sound board
@@ -38,8 +38,12 @@ const soundboard = {
    */
   definePads: function() {
     // TODO 2
-    // soundboard.kickElement = ...
-    // soundboard.hihatElement = ...
+    soundboard.kickElement = document.querySelector('.pad-1');
+    soundboard.hihatElement = document.querySelector('.pad-2');
+    soundboard.snareElement = document.querySelector('.pad-3');
+    soundboard.wobbleElement = document.querySelector('.pad-4');
+    soundboard.vocalElement = document.querySelector('.pad-5');
+    soundboard.gregElement = document.querySelector('.pad-6');
     // etc
   },
 
@@ -48,12 +52,12 @@ const soundboard = {
    * les différents samples audio à jouer
    */
   preloadSamples: function() {
-    soundboard.kickAudio = new Audio('assets/audio/kick.opus');
-    soundboard.hihatAudio = new Audio('assets/audio/hihat.opus');
-    soundboard.snareAudio = new Audio('assets/audio/snare.opus');
-    soundboard.wobbleAudio = new Audio('assets/audio/wobble.opus');
-    soundboard.vocalAudio = new Audio('assets/audio/voice.opus');
-    soundboard.scratchAudio = new Audio('assets/audio/scratch.opus');
+    soundboard.kickAudio = new Audio('assets/audio/kick.wav');
+    soundboard.hihatAudio = new Audio('assets/audio/hihat.wav');
+    soundboard.snareAudio = new Audio('assets/audio/snare.wav');
+    soundboard.wobbleAudio = new Audio('assets/audio/wobble.wav');
+    soundboard.vocalAudio = new Audio('assets/audio/voice.wav');
+    soundboard.gregAudio = new Audio('assets/audio/greg.mp3');
   },
 
   /**
@@ -97,11 +101,51 @@ const soundboard = {
   },
 
   /**
-   * Méthode/Handler exécuté lorsque le pad "scratch" est appuyé
+   * Méthode/Handler exécuté lorsque le pad "greg" est appuyé
    */
-  handleScratchClick: function() {
-    soundboard.scratchAudio.currentTime = 0;
-    soundboard.scratchAudio.play();
+  handleGregClick: function() {
+    soundboard.gregAudio.currentTime = 0;
+    soundboard.gregAudio.play();
+  },
+
+  /**
+  * Méthode/Handler exécuté lorsque n'importe quelle touche du clavier est pressée
+  */
+  handleKeyboard: function(event) {
+    
+    binded = true; 
+    
+    switch (event.key) {
+      case 'w':
+        targetElement = soundboard.kickElement;
+        break;
+      case 'x':
+        targetElement = soundboard.hihatElement;
+        break;
+      case 'c':
+        targetElement = soundboard.snareElement;
+        break;
+      case 'v':
+        targetElement = soundboard.wobbleElement;
+        break;
+      case 'b':
+        targetElement = soundboard.vocalElement;
+        break;
+      case 'n':
+        targetElement = soundboard.gregElement;
+        break;
+      default:
+        binded = false;
+    }
+
+    if (targetElement && binded == true) {
+      targetElement.classList.add('hovered');
+      setTimeout(() => {
+        targetElement.classList.remove('hovered');
+      }, 200);
+      
+      targetElement.click();
+    }
   },
 
   /**
@@ -109,6 +153,20 @@ const soundboard = {
    */
   attachEvents: function() {
     // TODO 3
+    soundboard.kickElement.addEventListener('click', soundboard.handleKickClick);
+
+    soundboard.hihatElement.addEventListener('click', soundboard.handleHihatClick);
+
+    soundboard.snareElement.addEventListener('click', soundboard.handleSnareClick);
+
+    soundboard.wobbleElement.addEventListener('click', soundboard.handleWobbleClick);
+
+    soundboard.vocalElement.addEventListener('click', soundboard.handleFxClick);
+
+    soundboard.gregElement.addEventListener('click', soundboard.handleGregClick);
+
+    document.addEventListener('keydown', soundboard.handleKeyboard);
+
   },
 
 }
